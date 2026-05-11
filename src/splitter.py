@@ -5,7 +5,7 @@
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 
-def split_documents(docs, chunk_size: int = 500, chunk_overlap: int = 50):
+def split_documents(docs, chunk_size: int = 800, chunk_overlap: int = 50):
     """
     对文档列表进行递归字符分割。
 

@@ -53,7 +53,7 @@ def build_vectorstore(file_paths: list, chunk_size: int = 500, chunk_overlap: in
     return vectorstore
 
 
-def get_retriever(file_paths: list = None, k: int = 4):
+def get_retriever(file_paths: list = None, k: int = 4, chunk_size: int = 800, chunk_overlap: int = 50):
     """
     返回一个检索器实例。
     如果 file_paths 不为空，先构建向量库；如果为空，直接加载已有向量库。
@@ -62,7 +62,7 @@ def get_retriever(file_paths: list = None, k: int = 4):
     embedder = get_embedder()
 
     if file_paths:
-        vectorstore = build_vectorstore(file_paths)
+        vectorstore = build_vectorstore(file_paths, chunk_size=chunk_size, chunk_overlap=chunk_overlap)
     else:
         vectorstore = Chroma(
             collection_name=COLLECTION_NAME,
