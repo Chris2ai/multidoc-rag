@@ -24,11 +24,15 @@ retriever = get_retriever()
 
 # ---------- 2. 格式化文档块 ----------
 def format_docs(docs):
-    """格式化检索到的文档块。"""
-    return "\n\n".join(
-        f"【来源：{doc.metadata.get('source', '未知')}】\n{doc.page_content}"
-        for doc in docs
-    )
+    """格式化检索到的文档块，并加上便于引用的序号。"""
+    formatted = []
+    for i, doc in enumerate(docs, start=1):
+        source = doc.metadata.get('source', '未知')
+        content = doc.page_content
+        formatted.append(
+            f"【块{i} - 来源：{source}】\n{content}"
+        )
+    return "\n\n".join(formatted)
 
 # ---------- 3. 大模型 ----------
 llm = ChatOpenAI(
@@ -40,10 +44,11 @@ llm = ChatOpenAI(
 
 # ---------- 4. 最终的问答提示模板 ----------
 # 注意：不再包含 document_context 变量，文档内容会直接拼接到 question 中。
-qa_template = """你是一个基于文档知识的问答助手。请根据以下规则回答用户问题：
-- 如果提供了文档内容，请基于文档内容回答。
-- 如果文档中没有相关信息，请如实说明"文档中未找到相关信息"。
-- 回答时可以参考对话历史，但不要捏造文档里没有的信息。"""
+qa_template = """你是一个基于文档知识的问答助手。请严格按照以下规则回答：
+1. 优先根据提供的文档内容回答，在答案中引用具体的【块X - 来源：...】作为依据。
+2. 如果文档中没有相关信息，请明确说明“文档中未找到相关信息”。
+3. 回答时可以参考对话历史，但不要捏造文档以外的信息。
+4. 在回答的最后，单独一行列出“参考来源：”，并列出所有用到的文档块（例如“块1, 块2 来自 xxx.pdf”）。"""
 
 qa_prompt = ChatPromptTemplate.from_messages([
     ("system", qa_template),
