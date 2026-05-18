@@ -22,6 +22,10 @@
 | 前端 | Streamlit | Web 交互界面 |
 | 文档解析 | PyPDF + docx2txt | 多格式文档加载 |
 
+## 📝 相关文章
+
+- [从零搭建多文档 RAG 问答系统：LangChain + 通义千问全链路实践](https://blog.csdn.net/mz_2000/article/details/161076519?sharetype=blogdetail&sharerId=161076519&sharerefer=PC&sharesource=mz_2000&spm=1011.2480.3001.8118)
+
 ## 🚀 快速开始
 
 ### 环境要求
